@@ -1,20 +1,34 @@
+import React from "react";
 import AppLoading from "expo-app-loading";
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import LoggedOutNav from "./navigators/LoggedOutNav";
+import { ApolloProvider, useReactiveVar } from "@apollo/client";
+import client, { isLoggedInVar, tokenVar } from "./apollo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const onFinish = () => setLoading(false);
-  const preload = () => {
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const preloadAssets = () => {
     const fontsToLoad = [Ionicons.font];
     const fontsPromises = fontsToLoad.map((font) => Font.loadAsync(font));
-    const imagesToLoad = [require("./assets/chungchun.png")];
+    const imagesToLoad = [require("./assets/cafe1.jpeg")];
     const imagesPromises = imagesToLoad.map((image) => Asset.loadAsync(image));
     return Promise.all([...fontsPromises, ...imagesPromises]);
+  };
+  const preload = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      isLoggedInVar(true);
+      tokenVar(token);
+    }
+    return preloadAssets();
   };
   if (loading) {
     return (
@@ -26,10 +40,11 @@ export default function App() {
     );
   }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <LoggedOutNav />
+      </NavigationContainer>
+    </ApolloProvider>
   );
 }
 
