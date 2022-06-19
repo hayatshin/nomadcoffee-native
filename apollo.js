@@ -26,7 +26,7 @@ export const logUserIn = async (token) => {
 };
 
 const httpLink = createHttpLink({
-  uri: "https://modern-worms-bet-218-147-138-163.loca.lt/graphql",
+  uri: "https://cold-parks-mix-221-165-61-17.loca.lt/graphql",
 });
 
 const authLink = setContext(async (_, { headers }) => {

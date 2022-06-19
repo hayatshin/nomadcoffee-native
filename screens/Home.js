@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
+  Animated,
   Text,
   View,
   TouchableOpacity,
   Dimensions,
   Keyboard,
+  Easing,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import colors from "../colors";
 import styled from "styled-components/native";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import AuthLayout from "../components/AuthLayout";
 import { useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
@@ -39,6 +41,8 @@ const CoffeeForm = styled.View`
   border-width: 8px;
 `;
 
+const AnimatedCoffeeForm = Animated.createAnimatedComponent(CoffeeForm);
+
 const CoffeeText = styled.TextInput`
   background-color: ${colors.beige};
   width: 90%;
@@ -49,28 +53,54 @@ const CoffeeText = styled.TextInput`
 `;
 
 export default function Home() {
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("start");
+      goDownY.start();
+      console.log("end");
+    }, 2000);
+  }, []);
   const navigation = useNavigation();
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
   const { register, setValue, handleSubmit } = useForm();
   const [seeCoffeeShopQuery, { data, loading }] =
     useLazyQuery(SEE_COFEEE_QUERY);
-  const onValid = (keyword) => {
+  const onValid = async (keyword) => {
     Keyboard.dismiss();
     if (!loading) {
       seeCoffeeShopQuery({
         variables: {
-          keyword: keyword.cafekeyword + "",
+          keyword: keyword?.cafekeyword + "",
           page: 1,
         },
-      });
-      navigation.navigate("CafeList", {
-        cafeArray: data?.seeCoffeeShops,
+      }).then((data) => {
+        navigation.navigate("CafeList", {
+          cafeArray: data?.data?.seeCoffeeShops,
+        });
       });
     }
   };
+  const scale = useRef(new Animated.Value(0)).current;
+  const animateY = useRef(new Animated.Value(-700)).current;
+  const goDownY = Animated.spring(animateY, {
+    toValue: 30,
+    duration: 800,
+    easing: Easing.linear,
+    bounciness: 10,
+    useNativeDriver: true,
+  });
+  const scaleBig = animateY.interpolate({
+    inputRange: [-700, 0, 40],
+    outputRange: [0, 0.7, 1],
+    extrapolate: "clamp",
+  });
   return (
     <AuthLayout>
-      <CoffeeForm screenWidth={screenWidth} screenHeight={screenHeight}>
+      <AnimatedCoffeeForm
+        style={{ transform: [{ scale: scaleBig }, { translateY: animateY }] }}
+        screenWidth={screenWidth}
+        screenHeight={screenHeight}
+      >
         <Feather
           style={{
             color: colors.darkBrown,
@@ -116,7 +146,7 @@ export default function Home() {
             </Text>
           </TouchableOpacity>
         </View>
-      </CoffeeForm>
+      </AnimatedCoffeeForm>
     </AuthLayout>
   );
 }
