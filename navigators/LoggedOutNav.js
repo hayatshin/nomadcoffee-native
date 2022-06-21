@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Home from "../screens/Home";
 import Search from "../screens/Search";
 import Profile_Login from "../screens/Profile_Login";
 import Profile_Logout from "../screens/Profile_Logout";
 import { useReactiveVar } from "@apollo/client";
 import { isLoggedInVar } from "../apollo";
-import StackNavFactory from "./StackNavFactory";
+import HomeNav from "./HomeNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +32,7 @@ export default function LoggedOutNav() {
         tabBarInactiveTintColor: "#313640",
       })}
     >
-      <Tab.Screen name="Home" component={StackNavFactory} screenName="Home" />
+      <Tab.Screen name="Home" component={HomeNav} screenName="Home" />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen
         name="Profile"

@@ -6,6 +6,7 @@ import {
 } from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setContext } from "@apollo/client/link/context";
+import { offsetLimitPagination } from "@apollo/client/utilities";
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar("");
@@ -26,7 +27,7 @@ export const logUserIn = async (token) => {
 };
 
 const httpLink = createHttpLink({
-  uri: "https://cold-parks-mix-221-165-61-17.loca.lt/graphql",
+  uri: "https://ready-insects-refuse-218-147-138-163.loca.lt/graphql",
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -39,9 +40,19 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        seeFeed: offsetLimitPagination(),
+      },
+    },
+  },
+});
+
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache,
 });
 
 export default client;

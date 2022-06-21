@@ -12,13 +12,7 @@ import Header from "../components/Header";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-
-const LABEL = styled.Text`
-  color: ${colors.lightBrown};
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
-`;
+import CafeCard from "../components/CafeCard";
 
 const FIELDTEXT = styled.Text`
   color: ${colors.darkBrown};
@@ -27,7 +21,7 @@ const FIELDTEXT = styled.Text`
 `;
 
 export default function CafeList({ route }) {
-  const navigation = useNavigation();
+  const [refreshing, setRefreshing] = useState(false);
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -35,68 +29,16 @@ export default function CafeList({ route }) {
       setLoading(true);
     }
   }, [route]);
-  const goBack = () => {
-    navigation.goBack();
-  };
 
-  const FlatCard = ({ item }) => (
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#C2B099",
-        padding: 10,
-        borderRadius: 10,
-        marginTop: 35,
-        width: 300,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <FIELDTEXT style={{ fontSize: 23, fontWeight: "600" }}>
-        {item?.name}
-      </FIELDTEXT>
-      <View style={{ display: "flex", flexDirection: "row" }}>
-        <LABEL style={{ marginRight: 10 }}>Latitude</LABEL>
-        <FIELDTEXT>{item?.latitude}</FIELDTEXT>
-        <View style={{ width: 30 }}></View>
-        <LABEL style={{ marginRight: 10 }}>Logitude</LABEL>
-        <FIELDTEXT>{item?.longitude}</FIELDTEXT>
-      </View>
-    </View>
-  );
   const dataExist = route?.params?.cafeArray.length !== 0;
-
   return loading ? (
     <View style={{ flex: 1 }}>
       <Header />
-      <TouchableOpacity
-        style={{ top: screenHeight * 0.16, left: 20 }}
-        onPress={goBack}
-      >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Ionicons
-            style={{
-              fontSize: 20,
-              marginRight: 10,
-              color: colors.brown,
-            }}
-            name="arrow-back"
-          />
-          <Text style={{ fontSize: 20, color: colors.brown }}>Go back</Text>
-        </View>
-      </TouchableOpacity>
       <View
         style={{
           width: "100%",
           height: "100%",
-          top: screenHeight * 0.14,
+          top: 17,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -105,8 +47,8 @@ export default function CafeList({ route }) {
         {dataExist ? (
           <FlatList
             data={route?.params?.cafeArray}
-            renderItem={FlatCard}
-            keyExtractor={(item) => item.id}
+            renderItem={CafeCard}
+            keyExtractor={(item) => item.name}
           />
         ) : (
           <View

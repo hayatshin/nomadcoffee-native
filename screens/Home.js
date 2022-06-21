@@ -15,13 +15,15 @@ import { gql, useLazyQuery } from "@apollo/client";
 import AuthLayout from "../components/AuthLayout";
 import { useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const SEE_COFEEE_QUERY = gql`
-  query seeCoffeeShops($keyword: String!, $page: Int!) {
-    seeCoffeeShops(keyword: $keyword, page: $page) {
+  query seeCoffeeShop($keyword: String!) {
+    seeCoffeeShop(keyword: $keyword) {
       name
       latitude
       longitude
+      photo
     }
   }
 `;
@@ -29,8 +31,8 @@ const SEE_COFEEE_QUERY = gql`
 const CoffeeForm = styled.View`
   background-color: rgba(212, 160, 125, 0.8);
   padding: 5px;
-  width: ${(props) => props.screenWidth * 0.7};
-  height: ${(props) => props.screenHeight * 0.5};
+  width: ${(props) => props.screenWidth * 0.7}px;
+  height: ${(props) => props.screenHeight * 0.5}px;
   border-radius: 20px;
   align-self: center;
   display: flex;
@@ -55,9 +57,7 @@ const CoffeeText = styled.TextInput`
 export default function Home() {
   useEffect(() => {
     setTimeout(() => {
-      console.log("start");
       goDownY.start();
-      console.log("end");
     }, 2000);
   }, []);
   const navigation = useNavigation();
@@ -71,16 +71,14 @@ export default function Home() {
       seeCoffeeShopQuery({
         variables: {
           keyword: keyword?.cafekeyword + "",
-          page: 1,
         },
       }).then((data) => {
         navigation.navigate("CafeList", {
-          cafeArray: data?.data?.seeCoffeeShops,
+          cafeArray: data?.data?.seeCoffeeShop,
         });
       });
     }
   };
-  const scale = useRef(new Animated.Value(0)).current;
   const animateY = useRef(new Animated.Value(-700)).current;
   const goDownY = Animated.spring(animateY, {
     toValue: 30,
@@ -94,6 +92,9 @@ export default function Home() {
     outputRange: [0, 0.7, 1],
     extrapolate: "clamp",
   });
+  const navToAllList = () => {
+    navigation.navigate("AllCafeList");
+  };
   return (
     <AuthLayout>
       <AnimatedCoffeeForm
@@ -147,6 +148,30 @@ export default function Home() {
           </TouchableOpacity>
         </View>
       </AnimatedCoffeeForm>
+      <TouchableOpacity
+        onPress={navToAllList}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 50,
+        }}
+      >
+        <Ionicons
+          style={{ fontSize: 25, marginRight: 10, color: colors.brown }}
+          name="md-arrow-forward"
+        ></Ionicons>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "700",
+            color: colors.brown,
+          }}
+        >
+          See All Cafe List
+        </Text>
+      </TouchableOpacity>
     </AuthLayout>
   );
 }
