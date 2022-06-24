@@ -18,11 +18,8 @@ const HeaderCup = styled.View`
 `;
 
 export default function Header() {
-  const navigation = useNavigation();
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-  const goBack = () => {
-    navigation.goBack();
-  };
+
   return (
     <View
       style={{
@@ -53,29 +50,6 @@ export default function Header() {
           </Text>
         </View>
       </HeaderCup>
-
-      <TouchableOpacity
-        style={{ top: 20, left: 20, height: 60 }}
-        onPress={goBack}
-      >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Ionicons
-            style={{
-              fontSize: 20,
-              marginRight: 10,
-              color: colors.brown,
-            }}
-            name="arrow-back"
-          />
-          <Text style={{ fontSize: 20, color: colors.brown }}>Go back</Text>
-        </View>
-      </TouchableOpacity>
     </View>
   );
 }

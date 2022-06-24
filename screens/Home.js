@@ -58,7 +58,7 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       goDownY.start();
-    }, 2000);
+    }, 1000);
   }, []);
   const navigation = useNavigation();
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -82,7 +82,7 @@ export default function Home() {
   const animateY = useRef(new Animated.Value(-700)).current;
   const goDownY = Animated.spring(animateY, {
     toValue: 30,
-    duration: 800,
+    duration: 500,
     easing: Easing.linear,
     bounciness: 10,
     useNativeDriver: true,
@@ -92,9 +92,7 @@ export default function Home() {
     outputRange: [0, 0.7, 1],
     extrapolate: "clamp",
   });
-  const navToAllList = () => {
-    navigation.navigate("AllCafeList");
-  };
+
   return (
     <AuthLayout>
       <AnimatedCoffeeForm
@@ -148,30 +146,6 @@ export default function Home() {
           </TouchableOpacity>
         </View>
       </AnimatedCoffeeForm>
-      <TouchableOpacity
-        onPress={navToAllList}
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 50,
-        }}
-      >
-        <Ionicons
-          style={{ fontSize: 25, marginRight: 10, color: colors.brown }}
-          name="md-arrow-forward"
-        ></Ionicons>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "700",
-            color: colors.brown,
-          }}
-        >
-          See All Cafe List
-        </Text>
-      </TouchableOpacity>
     </AuthLayout>
   );
 }

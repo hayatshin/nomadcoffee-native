@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -13,6 +13,7 @@ import colors from "../colors";
 import Header from "../components/Header";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import CafeCard from "../components/CafeCard";
+import AuthLayout from "../components/AuthLayout";
 
 const SEE_ALL_COFFEESHOPS = gql`
   query seeCoffeeShops($offset: Int!) {
@@ -28,32 +29,30 @@ const SEE_ALL_COFFEESHOPS = gql`
 export default function AllCafeList() {
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
   const navigation = useNavigation();
+
   const [refreshing, setRefreshing] = useState(false);
   const { loading, data, refetch, fetchMore } = useQuery(SEE_ALL_COFFEESHOPS, {
     variables: {
       offset: 0,
     },
   });
-  const goBack = () => {
-    navigation.goBack();
-  };
+  console.log(data);
   const refresh = async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   };
   return (
-    <View
-      style={{
-        flex: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View>
       <Header />
       <FlatList
-        onEndReachedThreshold={0.05}
+        contentContainerStyle={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingBottom: 150,
+        }}
+        onEndReachedThreshold={0.1}
         onEndReached={() =>
           fetchMore({
             variables: {
@@ -68,7 +67,6 @@ export default function AllCafeList() {
         keyExtractor={(item) => item.name}
         showsVerticalScrollIndicator={false}
       />
-      {/* </View> */}
     </View>
   );
 }

@@ -21,6 +21,7 @@ const FIELDTEXT = styled.Text`
 `;
 
 export default function CafeList({ route }) {
+  const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
   const [loading, setLoading] = useState(false);
@@ -29,11 +30,36 @@ export default function CafeList({ route }) {
       setLoading(true);
     }
   }, [route]);
-
+  const goBack = () => {
+    navigation.goBack();
+  };
   const dataExist = route?.params?.cafeArray.length !== 0;
   return loading ? (
     <View style={{ flex: 1 }}>
       <Header />
+
+      <TouchableOpacity
+        style={{ top: 20, left: 20, height: 30 }}
+        onPress={goBack}
+      >
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Ionicons
+            style={{
+              fontSize: 20,
+              marginRight: 10,
+              color: colors.brown,
+            }}
+            name="arrow-back"
+          />
+          <Text style={{ fontSize: 20, color: colors.brown }}>Go back</Text>
+        </View>
+      </TouchableOpacity>
       <View
         style={{
           width: "100%",

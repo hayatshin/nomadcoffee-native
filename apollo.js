@@ -27,7 +27,7 @@ export const logUserIn = async (token) => {
 };
 
 const httpLink = createHttpLink({
-  uri: "https://ready-insects-refuse-218-147-138-163.loca.lt/graphql",
+  uri: "https://cfed-218-147-138-163.ngrok.io/graphql",
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -44,7 +44,7 @@ export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        seeFeed: offsetLimitPagination(),
+        seeCoffeeShops: offsetLimitPagination(),
       },
     },
   },

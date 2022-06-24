@@ -6,6 +6,7 @@ import Profile_Login from "../screens/Profile_Login";
 import Profile_Logout from "../screens/Profile_Logout";
 import { useReactiveVar } from "@apollo/client";
 import { isLoggedInVar } from "../apollo";
+import AllCafeList from "../screens/AllCafeList";
 import HomeNav from "./HomeNav";
 
 const Tab = createBottomTabNavigator();
@@ -32,8 +33,8 @@ export default function LoggedOutNav() {
         tabBarInactiveTintColor: "#313640",
       })}
     >
-      <Tab.Screen name="Home" component={HomeNav} screenName="Home" />
-      <Tab.Screen name="Search" component={Search} />
+      <Tab.Screen name="Home" component={AllCafeList} screenName="Home" />
+      <Tab.Screen name="Search" component={HomeNav} />
       <Tab.Screen
         name="Profile"
         component={isLoggedIn ? Profile_Login : Profile_Logout}
