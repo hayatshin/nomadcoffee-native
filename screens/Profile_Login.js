@@ -47,7 +47,7 @@ export default function Profile_Login() {
       {/* name */}
       <View
         style={{
-          top: screenHeight * 0.14,
+          // top: screenHeight * 0.14,
           display: "flex",
           flexDirection: "row",
           justifySelf: "start",
@@ -75,7 +75,7 @@ export default function Profile_Login() {
         style={{
           width: "100%",
           padding: 45,
-          top: screenHeight * 0.15,
+          // top: screenHeight * 0.15,
           height: screenHeight * 0.76,
           display: "flex",
           flexDirection: "column",

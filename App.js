@@ -6,7 +6,7 @@ import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
-import LoggedOutNav from "./navigators/LoggedOutNav";
+import TopStackNav from "./navigators/TopStackNav";
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import client, { isLoggedInVar, tokenVar } from "./apollo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -48,7 +48,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <NavigationContainer>
-        <LoggedOutNav />
+        <TopStackNav />
       </NavigationContainer>
     </ApolloProvider>
   );

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
@@ -70,28 +70,35 @@ export default function Profile_Logout() {
   const usernameRef = useRef();
   const passwordRef = useRef();
 
-  // useEffect(() => {
-  //   register("username");
-  //   register("password");
-  // }, [register]);
+  useEffect(() => {
+    register("username");
+    register("password");
+  }, [register]);
 
   const onCompleted = async (data) => {
     const {
-      login: { ok, token },
+      login: { ok, token, error },
     } = data;
     if (ok) {
       await logUserIn(token);
     }
+    if (error) {
+      console.log(error);
+    }
   };
 
-  const [loginMutation, { loading }] = useMutation(LOGIN_MUTATION, {
-    onCompleted,
-  });
+  const [loginMutation, { loading, data, error }] = useMutation(
+    LOGIN_MUTATION,
+    {
+      onCompleted,
+    }
+  );
 
   const onNext = (nextOne) => {
     nextOne?.current?.focus();
   };
   const onValid = (data) => {
+    console.log(data);
     if (!loading) {
       loginMutation({
         variables: {

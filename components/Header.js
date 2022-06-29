@@ -3,14 +3,14 @@ import styled from "styled-components/native";
 import { Text, View, Dimensions, TouchableOpacity } from "react-native";
 import colors from "../colors";
 import { Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const HeaderCup = styled.View`
   width: 100%;
-  height: ${(props) => props.screenHeight * 0.14}px;
+  height: ${(props) => props.screenHeight * 0.12}px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   background-color: ${colors.brown};
   box-sizing: border-box;
@@ -26,11 +26,11 @@ export default function Header() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        alignItems: "center",
         width: "100%",
       }}
     >
-      <HeaderCup screenHeight={screenHeight}>
-        <View style={{ height: screenHeight * 0.07 }}></View>
+      <HeaderCup style={{ paddingTop: 45 }} screenHeight={screenHeight}>
         <View
           style={{
             width: "43%",

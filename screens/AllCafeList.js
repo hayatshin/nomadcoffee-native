@@ -22,6 +22,7 @@ const SEE_ALL_COFFEESHOPS = gql`
       latitude
       longitude
       photo
+      id
     }
   }
 `;
@@ -29,14 +30,15 @@ const SEE_ALL_COFFEESHOPS = gql`
 export default function AllCafeList() {
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
   const navigation = useNavigation();
-
   const [refreshing, setRefreshing] = useState(false);
   const { loading, data, refetch, fetchMore } = useQuery(SEE_ALL_COFFEESHOPS, {
     variables: {
       offset: 0,
     },
   });
-  console.log(data);
+  useEffect(() => {
+    refetch();
+  }, []);
   const refresh = async () => {
     setRefreshing(true);
     await refetch();
@@ -52,7 +54,7 @@ export default function AllCafeList() {
           alignItems: "center",
           paddingBottom: 150,
         }}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.3}
         onEndReached={() =>
           fetchMore({
             variables: {
@@ -64,7 +66,7 @@ export default function AllCafeList() {
         onRefresh={refresh}
         data={data?.seeCoffeeShops}
         renderItem={CafeCard}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />
     </View>
